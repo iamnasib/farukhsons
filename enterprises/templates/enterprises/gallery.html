@@ -1,0 +1,21 @@
+{% extends "enterprises/base.html" %}
+
+{% block content %}
+    <div class="h-screen mt-2">
+<h2 class="text-4xl font-extrabold dark:text-white">Gallery</h2><br>
+{% if images %}
+<div class="grid grid-rows-2 grid-cols-4 grid-flow-col gap-2">
+    {% for img in images %}
+    <figure class="relative max-w-sm transition-all duration-300 cursor-pointer  hover:blur-lg">
+        
+          <img class="lg" src="{{ img.img.url }}" >
+        
+      </figure>
+      
+    {% endfor %}
+</div>
+{% else %}
+ <p class="text-gray-500 text-center">No images currently</p>
+{% endif %}
+</div>
+{% endblock content %}

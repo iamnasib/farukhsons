@@ -1,0 +1,71 @@
+{% extends "enterprises/base.html" %}
+
+{% block content %}
+    <div class="h-screen mt-2">
+        
+<div class="inline-flex rounded-md shadow-sm" role="group">
+    <span  role="button" class="py-2 px-4 text-sm font-medium text-gray-900 bg-white rounded-l-lg border border-gray-200 hover:bg-gray-100 
+        hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-blue-500 dark:focus:text-white"
+        onclick="location.href='{% url 'create' %}'" >Create Invoice
+    </span>
+    
+    <span  role="button" class="py-2 px-4 text-sm font-medium text-gray-900 bg-white rounded-l-lg border border-gray-200 hover:bg-gray-100 
+            hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-blue-500 dark:focus:text-white"
+            onclick="location.href='{% url 'admin:enterprises_workimages_add' %}'" >Add Images
+    </span>
+    <span  role="button" class="py-2 px-4 text-sm font-medium text-gray-900 bg-white rounded-l-lg border border-gray-200 hover:bg-gray-100 
+            hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-blue-500 dark:focus:text-white"
+            onclick="location.href='{% url 'admin:enterprises_workimages_changelist' %}'" >Change/Delete Images
+    </span>
+    <span  role="button" class="py-2 px-4 text-sm font-medium text-red-500 bg-white rounded-l-lg border border-gray-200 hover:bg-gray-100 
+            hover:text-red-900 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-blue-500 dark:focus:text-white"
+            onclick="location.href='{% url 'admin:logout' %}'" >Logout
+    </span>
+  </div><br><br>
+
+    
+<div class="overflow-x-auto relative shadow-md sm:rounded-lg">
+    <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <tr>
+                <th scope="col" class="py-3 px-6">
+                    Invoice No.
+                </th>
+                <th scope="col" class="py-3 px-6">
+                    Order No.
+                </th>
+                <th scope="col" class="py-3 px-6">
+                    Date
+                </th>
+                
+                <th scope="col" class="py-3 px-6">
+                    Action
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for invoice in invoices %}
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                <th scope="row" class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                    {{invoice.invoice_number}}
+                </th>
+                <td class="py-4 px-6">
+                    {{invoice.invoice_order_number_2}}
+                </td>
+                <td class="py-4 px-6">
+                    {{invoice.invoice_date}}
+                </td>
+                
+                <td class="py-4 px-6">
+                    <span class="mr-2 cursor-pointer hover:underline md:mr-2" onclick="location.href='{% url 'view' invoice.id %}'" >&#128065;</span>
+                    <span class="mr-2 cursor-pointer hover:underline md:mr-2" onclick="location.href='{% url 'delete' invoice.id %}'" >&#128465;</span>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+
+    </div>
+{% endblock content %}

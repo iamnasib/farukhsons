@@ -1,0 +1,197 @@
+{% extends "enterprises/base.html" %}
+
+{% block content %}
+    <br><div id="printableArea" >
+        <section class="py-20 bg-black">
+            <div class="max-w-5xl mx-auto py-16 bg-white">
+             <article class="overflow-">
+              <div class="bg-[white] rounded-b-md">
+                <div class="flex justify-between text-sm font-normal text-slate-700">
+                    <div class="mb-6 ">
+                       GST:{{request.user.userprofile.business_gst}}
+                   </div>
+                   <div class="mb-6 ">
+                    TAX INVOICE
+                  </div>
+                  <div class="mb-6 ">
+                    Ph. {{request.user.userprofile.business_phone}}
+                  </div>
+                </div>
+               <div class="p-9">
+                <div class="flex justify-between text-slate-700">
+                 <!-- <img class="object-cover h-12" src="https://pbs.twimg.com/profile_images/1513243060834123776/dL8-d7zI_400x400.png" /> -->
+           
+                 <p class="text-xl font-extrabold tracking-tight uppercase font-body">
+                  {{request.user.userprofile.business_title}}
+                 </p>
+                 <p class="text-sm font-normal ">
+                  Email:{{request.user.userprofile.business_email}}
+                 </p>
+                </div>
+               </div>
+               <div class="p-9">
+                <div class="flex justify-between text-slate-700">
+                
+                 <p class="text-lg font-normal  ">
+                  {{request.user.userprofile.business_tagline}}
+                 </p>
+                 <p class="text-sm font-normal ">
+                  Website:www.Farukhsons.com
+                 </p>
+                </div>
+               </div>
+               <div>
+                <p class="text-lg font-normal ">{{request.user.userprofile.business_address}}</p>
+               </div>
+               <br>
+               <div class="p-9">
+                <div class="block">
+                
+                  <div class="text-sm font-normal text-slate-700 ">
+                   <p >
+                    Invoice No:{{invoice.invoice_number}}
+                   </p>
+                   <p class="mt-1">Name: {{invoice.invoice_to}}</p>
+                   <p class="mt-1">Order No.{{invoice.invoice_order_number}}</p>
+                   <p class="mt-1">Dated:{{invoice.invoice_date}}</p>
+                   <p class="mt-1">No. {{invoice.invoice_order_number_2}}</p>
+                   <p class="mt-2 text-medium font-bold text-slate-700 ">{{invoice.invoice_heading}}</p>
+                  </div>
+                </div>
+               </div>
+           
+               <div class="p-9">
+                <div class="flex flex-col mx-0 mt-8">
+                 <table  class=" border border-slate-200 min-w-full divide-y divide-slate-500">
+                  <thead>
+                   <tr>
+                    <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-normal text-slate-700 sm:pl-6 md:pl-0">
+                      S.no.
+                     </th>
+                    <th scope="col" class=" py-3.5 px-3 text-center text-sm font-normal text-slate-700 sm:table-cell">
+                     Description
+                    </th>
+                    <th scope="col" class=" py-3.5 px-3 text-center text-sm font-normal text-slate-700 sm:table-cell">
+                     Qty/Unit
+                    </th>
+                    <th scope="col" class=" py-3.5 px-3 text-center text-sm font-normal text-slate-700 sm:table-cell">
+                     Rate(&#8377;)
+                    </th>
+                    <th scope="col" class="py-3.5 pl-3 pr-4 text-right text-sm font-normal text-slate-700 sm:pr-6 md:pr-0">
+                     Amount(&#8377;)
+                    </th>
+                   </tr>
+                  </thead>
+                  <tbody class="text-sm font-normal text-slate-700">
+                    {% for item in invoice_data.items %}
+                   <tr class="border border-slate-200">
+                    <td class="py-4 pl-4 pr-3 text-sm sm:pl-6 md:pl-0">
+                     
+                     <div class="mt-0.5">
+                      {{ forloop.counter }}
+                     </div>
+                    </td>
+                    <td class=" px-3 py-4 text-sm text-left text-slate-500 sm:table-cell">
+                      {{ item.invoice_product }}
+                      
+                    </td>
+                    <td class=" px-3 py-4 text-sm text-center text-slate-500 sm:table-cell">
+                      {% if item.invoice_qty == 0 %}{% else %}
+                      {{ item.invoice_qty }}{% endif %} {{ item.invoice_unit }}
+                    </td>
+                    <td class="py-4 pl-3 pr-4 text-sm text-center text-slate-500 sm:pr-6 md:pr-0">
+                      {{ item.invoice_product_rate }}
+                    </td>
+                    <td class="py-4 pl-3 pr-4 text-sm text-right text-slate-500 sm:pr-6 md:pr-0">
+                      {% if item.invoice_product_amt == "NaN" %}
+                      
+                      {% else %}
+                      {{ item.invoice_product_amt }}
+                      {% endif %}
+                      </td>
+                   </tr>
+                   {% endfor %}
+                   
+           
+                   
+                  </tbody>
+                  <tfoot >
+                  
+                   
+                   <tr class="border border-slate-200">
+                    <th scope="row" colspan="3" class="pt-4 pl-6 pr-3 text-sm font-normal text-right text-slate-700 sm:table-cell md:pl-0">
+                     Total
+                    </th>
+                    <th scope="row" class="pt-4 pl-4 pr-3 text-sm font-normal text-left text-slate-700 sm:">
+                     
+                    </th>
+                    <td class="pt-4 pl-3 pr-4 text-sm font-normal text-right text-slate-700 sm:pr-6 md:pr-0">
+                       {{ invoice_data.invoice_total_amt|floatformat:2 }}
+                    </td>
+                   </tr>
+                   <tr class="border border-slate-200">
+                    <th scope="row" colspan="3" class=" pt-4 pl-6 pr-3 text-sm font-normal text-right text-slate-700 sm:table-cell md:pl-0">
+                     CGST@{{ invoice_data.gst_rate }}%
+                    </th>
+                    <th scope="row" class="pt-4 pl-4 pr-3 text-sm font-normal text-left text-slate-700 sm:">
+                     
+                    </th>
+                    <td class="pt-4 pl-3 pr-4 text-sm font-normal text-right text-slate-700 sm:pr-6 md:pr-0">
+                     {{gst_amt|floatformat:2}}
+                    </td>
+                   </tr>
+                   <tr class="border border-slate-200">
+                    <th scope="row" colspan="3" class=" pt-4 pl-6 pr-3 text-sm font-normal text-right text-slate-700 sm:table-cell md:pl-0">
+                      SGST@{{ invoice_data.gst_rate }}%
+                    </th>
+                    <th scope="row" class="pt-4 pl-4 pr-3 text-sm font-normal text-left text-slate-700 sm:">
+                     
+                    </th>
+                    <td class="pt-4 pl-3 pr-4 text-sm font-normal text-right text-slate-700 sm:pr-6 md:pr-0">
+                      {{gst_amt|floatformat:2}}
+                    </td>
+                   </tr>
+                  </tfoot>
+                 </table>
+                </div>
+               </div><br>
+           
+               <div class="mt-48 p-9">
+                <div class="border-t pt-9 border-slate-200">
+                 <div class="mt-1 text-sm font-light text-slate-700">
+                  <p>
+                    Account Details; FARUKHSONS ENTERPRISES</p><p>
+J andK BANK BRANCH BEMINA  </p>
+<p>Account No;0372010100019431  IFSC;JAKA0BEMINA</p>
+<hr class="mt-1 mb-1">
+                   <p>This is a computer generated invoice.
+                  </p>
+                 </div>
+                </div>
+               </div>
+              </div>
+             </article>
+            </div>
+           </section>
+           
+    </div><br>
+    <button onclick="printDiv('printableArea')" class="cursor-pointer text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center 
+    mr-3 md:mr-0 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Print Invoice</button><br><br>
+    {% block jsfiles %}
+<script>
+var invoice_item_row_counter = 1
+
+// ADDING INVOICE ROWS ===================================================
+function printDiv(divName) {
+  var printContents = document.getElementById(divName).innerHTML;
+  var originalContents = document.body.innerHTML;
+
+  document.body.innerHTML = printContents;
+
+  window.print();
+
+ 
+}
+</script>
+{% endblock jsfiles %}
+{% endblock content%}

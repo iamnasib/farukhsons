@@ -1,0 +1,230 @@
+{% extends "enterprises/base.html" %}
+
+{% block content %}
+
+	<div class="mt-3">
+		<h2 class="mb-4 text-4xl tracking-tight font-extrabold text-center text-gray-900 dark:text-white">Create Invoice</h2>
+
+		<form method="post" id="invoice-form" hidden="true">
+			{% csrf_token %}
+			<div class="grid md:grid-cols-3 md:gap-6">
+				<div class="mb-6">
+				<label for="invoice_number"  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Invoice Number</label>
+				<input type="number" value="{{default_invoice_number}}" id="invoice_number" name="invoice-number" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500
+				focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white 
+				dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" >
+				</div>
+				<div class="mb-6">
+				<label for="invoice_date" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Invoice Date</label>
+				<input type="date" id="invoice_date" value="{{default_invoice_date}}" name="invoice-date" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" >
+				</div>
+				<div class="mb-6">
+					<label for="invoice_order_number" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Order Number</label>
+					<input type="text" id="invoice_order_number" name="invoice-order-number" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500
+					focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white 
+					dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="eg; 122 of 2022-2023" >
+					</div>
+			</div>
+			<div class="grid md:grid-cols-3 md:gap-6">
+				<div class="mb-6">
+					<label for="invoice_order_number_2" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">No.</label>
+					<input type="text" id="invoice_order_number_2" name="invoice-order-number-2" class="bg-gthray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 
+					focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+					placeholder="eg; MHCHD/TS-1995/6179-83" >
+				</div>
+				<div class="mb-6">
+				<label for="invoice_to" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Invoice to</label>
+				<input type="text" id="invoice_to" name="invoice-to" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 
+				focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+				placeholder="eg; Executive Engineer MHCHD Sgr" >
+				</div>
+				<div class="mb-6">
+					<label for="gst_rate" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">GST %age</label>
+					<input type="number" id="gst_rate" name="gst-rate" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 
+					focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+					placeholder="eg; 6" >
+				</div>
+			</div>
+			<div class="grid md:grid-cols-1 md:gap-6">
+				<div class="mb-6">
+					<label for="invoice_heading" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Invoice Heading</label>
+					<input type="text" id="invoice_heading" name="invoice-heading" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 
+					focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+					placeholder="eg; Executive Engineer MHCHD Sgr" >
+				</div>
+			</div>
+
+			
+<div class="overflow-x-auto relative shadow-md sm:rounded-lg">
+    <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <tr>
+				<th scope="col" class="py-3 px-6">
+                    S no.
+                </th>
+                <th scope="col" class="py-3 px-6">
+                    Description
+                </th>
+                <th scope="col" class="py-3 px-6">
+                    Quantity
+                </th>
+                <th scope="col" class="py-3 px-6">
+                    Unit
+                </th>
+                <th scope="col" class="py-3 px-6">
+                    Rate(&#8377;)
+                </th>
+                <th scope="col" class="py-3 px-6">
+                    Amount(&#8377;)
+                </th>
+            </tr>
+        </thead>
+        <tbody id="invoice-form-items-table-body">
+            <tr class="bg-white border-b dark:bg-gray-900 dark:border-gray-700">
+                <td scope="row" class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                    1
+                </td>
+				<!-- <th scope="row" class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                   
+                </th> -->
+				<td class="py-4 px-4">
+					<input name="invoice-product" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 
+					focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 
+					dark:focus:border-blue-500" placeholder="Description">
+                </td>
+                <td class="py-4 px-4">
+                    <input name="invoice-qty" type="number" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 
+					focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 
+					dark:focus:border-blue-500" placeholder="Quantity">
+                </td>
+                <td class="py-4 px-4">
+                    <input name="invoice-unit" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 
+					focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 
+					dark:focus:border-blue-500" placeholder="Unit">
+                </td>
+                <td class="py-4 px-4">
+                    <input name="invoice-product-rate" type="number" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 
+					focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 
+					dark:focus:border-blue-500" placeholder="Rate">
+                </td>
+                <td class="py-4 px-4">
+                    <input name="invoice-product-amt" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 
+					focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 
+					dark:focus:border-blue-500" placeholder="Amount" readonly>
+                </td>
+            </tr>
+			
+            
+        </tbody>
+		
+		<tfoot >
+                  
+                   
+			<tr class="border border-slate-200">
+			 <th scope="row" colspan="4" class=" pt-4 pl-6 pr-3 text-xs text-gray-700 text-right uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 sm:table-cell md:pl-0">
+			  Total
+			 </th>
+			 <th scope="row" class="pt-4 pl-4 pr-3 text-sm font-normal text-left text-slate-700 sm:">
+			  
+			 </th>
+			 <td >
+				<input step="any" name="invoice-total-amt" type="number" class="pt-4 pl-3 pr-4 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 
+					focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 
+					dark:focus:border-blue-500" placeholder="Amount">
+			 </td>
+			</tr>
+		</tfoot>
+    </table>
+</div>
+
+			<br><button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm 
+			w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Submit</button><br><br>
+			<button class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm 
+			 sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" id="invoice-form-addrow">Add Row</button>
+		  </form>
+		  
+	</div><br><br>
+	
+	{% block jsfiles %}
+<script>
+var invoice_item_row_counter = 1
+
+// ADDING INVOICE ROWS ===================================================
+function add_invoice_item_row() {
+    old_item_row_count = invoice_item_row_counter
+    invoice_item_row_counter++;
+
+    $('#invoice-form-items-table-body >tr:last').clone(true).insertAfter('#invoice-form-items-table-body >tr:last');
+    $('#invoice-form-items-table-body >tr:last input').val('');
+
+    $('#invoice-form-items-table-body >tr:last td')[0].innerHTML = invoice_item_row_counter
+   
+}
+function setup_invoice_rows() {
+    $("#invoice-form-addrow").click(function(event) {
+       event.preventDefault();
+       add_invoice_item_row();
+    });
+
+	for (var i = 0; i <= 2; i++) {
+        add_invoice_item_row();
+    }
+    
+}
+// update invoice amount
+function update_invoice_totals() {
+
+    // amount without gst
+    var sum_amt=0;
+	
+    $('input[name=invoice-product-amt]').each(function(index,elem){
+		
+			valu=parseFloat($(elem).val());
+        	sum_amt = sum_amt+valu
+		
+		
+		console.log(sum_amt);
+    });
+	
+	console.log(sum_amt);
+    $('input[name=invoice-total-amt]').val(sum_amt.toFixed(2));
+	
+
+}
+
+function initialize_auto_calculation(){
+    update_amounts($('#invoice-form-items-table-body input[name=invoice-qty]:first'));
+    $('input[name=invoice-qty], input[name=invoice-product-rate]').change(function (){
+        update_amounts($(this));
+    });
+}
+
+function update_amounts(element){
+    var product = element.parent().parent().find('input[name=invoice-product]').val();
+    var qty = parseInt(element.parent().parent().find('input[name=invoice-qty]').val());
+    var rate = parseFloat(element.parent().parent().find('input[name=invoice-product-rate]').val());
+
+    var amt_without_gst = rate * qty;
+
+    
+
+    element.parent().parent().find('input[name=invoice-product-amt]').val(amt_without_gst.toFixed(2));
+
+    update_invoice_totals();
+
+}
+
+$(document).ready(function() {
+
+    // Initialize invoice row addition
+    setup_invoice_rows();
+	// Initialize auto calculation of amounts
+    initialize_auto_calculation();
+
+    // Show the invoice form
+    $("#invoice-form")[0].hidden = false;
+
+});
+</script>
+{% endblock jsfiles %}
+{% endblock content%}
